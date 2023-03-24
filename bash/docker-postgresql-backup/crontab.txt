@@ -1,0 +1,2 @@
+# Daily at 00:05 (UTC, if not otherwise configured)
+05 00 * * * /root/backup.sh "$POSTGRES_URI" "$RCLONE_DESTINATION" "$HEALTHCHECK_URL" "$PGDUMP_OPTIONS"

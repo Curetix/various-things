@@ -1,0 +1,19 @@
+app = "archisteamfarm"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  image = "justarchi/archisteamfarm:latest"
+
+[env]
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[mounts]
+  destination = "/app/config"
+  source = "asf"
+
+[[services]]
