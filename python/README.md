@@ -1,5 +1,11 @@
 # Python Scripts
 
+## [compress_images.py](./compress_images.py)
+
+Compress all JPEG and PNG images in a specified folder, overwriting the originals.
+
+Usage: `python compress.py [IMAGE_FOLDER]`
+
 ## [fitness_faker.py](./fitness_faker.py)
 
 Generate datasource and datasets of fitness data for Google Fit. Useful for the German [AOK Bonus App](https://www.aok.de/pk/bonus-praemienprogramme/programme-tarife/).
