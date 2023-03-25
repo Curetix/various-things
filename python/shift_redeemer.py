@@ -114,7 +114,6 @@ if __name__ == "__main__":
         print("SHiFT code not provided!")
         sys.exit(1)
 
-    global driver
     options = Options()
     if not args.not_headless:
         options.add_argument("--headless")
