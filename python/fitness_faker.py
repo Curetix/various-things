@@ -132,19 +132,19 @@ class Fitness:
             print(error)
             return False
 
-    def fill_dataset(self, start: datetime, end: datetime):
-        delta = end - start
-        days = [start + timedelta(days=i) for i in range(delta.days + 1)]
+    def fill_dataset(self, start_date: datetime, end_date: datetime):
+        delta = end_date - start_date
+        days = [start_date + timedelta(days=i) for i in range(delta.days + 1)]
         points = []
         for d in days:
             steps = randint(10000, 12000)
             start_time = datetime(d.year, d.month, d.day, randint(8, 20), randint(0, 59), randint(0, 59))
             minutes = math.ceil(steps/100) + randint(-20, 20)
-            end_time = start + timedelta(minutes=minutes)
+            end_time = start_time + timedelta(minutes=minutes)
             points.append({
                 "dataTypeName": "com.google.step_count.delta",
-                "startTimeNanos": date_to_nano(start),
-                "endTimeNanos": date_to_nano(end),
+                "startTimeNanos": date_to_nano(start_time),
+                "endTimeNanos": date_to_nano(end_time),
                 "value": [
                     {
                         "intVal": steps
@@ -185,21 +185,23 @@ class Fitness:
             return False
 
 
-if __name__ == '__main__':
+def main():
     fitness = Fitness()
 
     parser = argparse.ArgumentParser(description="Google Fitness Faker")
     parser.add_argument("command", help="Command to run: create_source, delete_source, create_set, delete_set")
-    parser.add_argument("--start-date", help="Start date for dataset, format year,month,day")
-    parser.add_argument("--end-date", help="End date for dataset, format year,month,day")
-    parser.add_argument("--quick-set", help="Fill data for current month of current year up to current day", action="store_true", default=False)
-    parser.add_argument("--full-delete", help="In combination with delete_set, delete all data between 2000,1,1 and current date")
+    parser.add_argument("--start-date", help="Start date for dataset, format year-month-day")
+    parser.add_argument("--end-date", help="End date for dataset, format year-month-day")
+    parser.add_argument("--quick-set", help="Fill data for current month of current year up to current day",
+                        action="store_true", default=False)
+    parser.add_argument("--full-delete",
+                        help="In combination with delete_set, delete all data between 2000,1,1 and current date")
     args = parser.parse_args()
 
     if not args.command:
         print("No command provided")
         sys.exit(1)
-    
+
     if args.command == "create_source":
         print("Creating datasource.")
         print(fitness.create_datasource())
@@ -210,7 +212,7 @@ if __name__ == '__main__':
         if not fitness.get_datasource():
             print("Creating datasource.")
             print(fitness.create_datasource())
-        
+
         if args.quick_set:
             now = datetime.now()
             print(fitness.fill_dataset(datetime(now.year, now.month, 1), datetime(now.year, now.month, now.day - 1)))
@@ -218,14 +220,14 @@ if __name__ == '__main__':
             print("start_date or end_date not provided")
             sys.exit(1)
         else:
-            start = args.start_date.split(",")
-            end = args.end_date.split(",")
+            start = [int(s) for s in args.start_date.split("-")]
+            end = [int(s) for s in args.end_date.split("-")]
             print(fitness.fill_dataset(datetime(*start), datetime(*end)))
     elif args.command == "delete_set":
         if not fitness.get_datasource():
             print("Datasource not found")
             sys.exit()
-        
+
         if args.full_delete:
             now = datetime.now()
             print(fitness.delete_dataset(datetime(2000, 1, 1), datetime(now.year, now.month, now.day)))
@@ -233,6 +235,10 @@ if __name__ == '__main__':
             print("start_date or end_date not provided")
             sys.exit(1)
         else:
-            start = args.start_date.split(",")
-            end = args.end_date.split(",")
+            start = [int(s) for s in args.start_date.split("-")]
+            end = [int(s) for s in args.end_date.split("-")]
             print(fitness.delete_dataset(datetime(*start), datetime(*end)))
+
+
+if __name__ == '__main__':
+    main()
