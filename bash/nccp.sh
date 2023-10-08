@@ -18,13 +18,14 @@ fi
 
 SOURCE="$1"
 DESTINATION="$2"
-NEXTCLOUD_POD=$(sudo k3s kubectl -n ix-nextcloud get pods --no-headers | grep -E -v "(redis|postgresql|cronjob)" | awk '{print $1}')
+NEXTCLOUD_POD=$(sudo k3s kubectl -n ix-nextcloud get pods --no-headers | grep -E -v "(cnpg|redis|imaginary|notify|nginx|postgresql|cron)" | awk '{print $1}')
 
 echo "Copying files..."
 sudo rsync -ah --info="progress2" --exclude="*.zip" --exclude="*.rar" --exclude="*.7z" "$SOURCE" "$DESTINATION"
 
 echo "Setting permissions..."
-sudo chown -R www-data:www-data "$DESTINATION"
+sudo chown -R apps:apps "$DESTINATION"
+sudo chmod -R 775 "$DESTINATION"
 
 echo "Starting Nextcloud scan..."
-sudo k3s kubectl -n ix-nextcloud exec -it $NEXTCLOUD_POD -c nextcloud -- runuser -u www-data -- php occ files:scan -n -p ${DESTINATION/"/mnt/store/cloud"/}
+sudo k3s kubectl -n ix-nextcloud exec -it $NEXTCLOUD_POD -c nextcloud -- php occ files:scan -n -p ${DESTINATION/"/mnt/store/cloud"/}

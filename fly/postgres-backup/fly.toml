@@ -1,0 +1,5 @@
+app = "backup"
+primary_region = "ams"
+
+[build]
+  dockerfile = "fly.Dockerfile"

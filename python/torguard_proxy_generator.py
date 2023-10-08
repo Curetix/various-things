@@ -6,10 +6,19 @@ import urllib.parse
 socks_ips = [
     "206.217.216.4",
     "206.217.216.8",
-    "46.23.78.24",
+    "89.248.168.20",
+    "89.248.168.60",
+    "89.248.168.61",
+    "89.248.168.63",
+    "89.248.168.69",
+    "89.248.168.70",
+    "89.248.168.71",
+    "89.248.168.72",
+    "89.248.168.73",
+    "89.248.168.112",
     "46.23.78.25"
 ]
-# Available ports: 1080, 1085, 1090
+# Available ports: 990, 1080, 1085, 1090
 socks_port = 1080
 
 # Primarily European servers, more servers here: https://torguard.net/network/ssl/
@@ -34,7 +43,7 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--password", help="TorGuard password")
     args = parser.parse_args()
 
-    if not args.username or args.password:
+    if not args.username or not args.password:
         print("Username or password not provided")
         sys.exit(1)
 

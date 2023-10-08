@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "flexispot-clicker"
+version = "0.1.0"
+description = ""
+authors = ["Curetix <me@curetix.eu>"]
+readme = "README.md"
+packages = [{include = "flexispot_clicker"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Pillow = "^9.5.0"
+PyAutoGUI = "^0.9.53"
+keyboard = "^0.13.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

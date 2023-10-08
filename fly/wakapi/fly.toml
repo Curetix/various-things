@@ -1,0 +1,21 @@
+app = "wakapi"
+primary_region = "ams"
+
+[build]
+  image = "ghcr.io/muety/wakapi:latest"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[mounts]]
+  source = "wakapi"
+  destination = "/data"
+  processes = ["app"]
+
+[env]
+  ENVIRONMENT = "production"
+  WAKAPI_PORT = 8080
