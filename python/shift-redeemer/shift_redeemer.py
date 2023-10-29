@@ -21,11 +21,11 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 
 driver: webdriver = None
-
+base_url = "https://shift.gearboxsoftware.com"
 
 def login(email: str, password: str):
     print("Logging in...")
-    driver.get("https://shift.gearbox.com/home")
+    driver.get("%s/home" % base_url)
     try:
         driver.execute_script("acceptCookieBanner();")
     except JavascriptException:
@@ -46,7 +46,7 @@ def login(email: str, password: str):
     password_input.send_keys(password)
     submit_button.click()
 
-    if driver.current_url.startswith("https://shift.gearbox.com/home"):
+    if driver.current_url.startswith("%s/home" % base_url):
         print(driver.find_element(By.CLASS_NAME, "alert").text)
         sys.exit(1)
     else:
@@ -68,7 +68,7 @@ def redeem(code: str):
         "psn": "PlayStation",
     }
 
-    driver.get("https://shift.gearboxsoftware.com/rewards")
+    driver.get("%s/rewards" % base_url)
     redeems = 0
 
     while True:
@@ -81,7 +81,12 @@ def redeem(code: str):
         code_result = driver.find_element(By.ID, "code_results")
         code_redeem_forms = driver.find_elements(By.ID, "new_archway_code_redemption")
 
-        if code_result.text.find("This is not a valid SHiFT code") > -1 or len(code_redeem_forms) == 0:
+        if "Unexpected error occurred" in code_result.text:
+            print("Error redeeming code, likely rate-limited. Waiting 60 seconds...")
+            sleep(60)
+            continue
+
+        if "This is not a valid SHiFT code" in code_result.text or len(code_redeem_forms) == 0:
             print(code_result.text)
             break
 
@@ -98,11 +103,6 @@ def redeem(code: str):
         # Get result text from alert box
         result = driver.find_element(By.CLASS_NAME, "alert").text
         print(result)
-
-        if "Unexpected error occurred" in result:
-            print("Error redeeming code, likely rate-limited. Waiting 60 seconds...")
-            sleep(60)
-            continue
 
         redeems += 1
         if redeems == len(code_redeem_forms):

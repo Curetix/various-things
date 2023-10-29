@@ -216,6 +216,7 @@ def main():
         if args.quick_set:
             now = datetime.now()
             print(fitness.fill_dataset(datetime(now.year, now.month, 1), datetime(now.year, now.month, now.day - 1)))
+            print("Done")
         elif not args.start_date or not args.end_date:
             print("start_date or end_date not provided")
             sys.exit(1)
@@ -223,6 +224,7 @@ def main():
             start = [int(s) for s in args.start_date.split("-")]
             end = [int(s) for s in args.end_date.split("-")]
             print(fitness.fill_dataset(datetime(*start), datetime(*end)))
+            print("Done")
     elif args.command == "delete_set":
         if not fitness.get_datasource():
             print("Datasource not found")
@@ -231,6 +233,7 @@ def main():
         if args.full_delete:
             now = datetime.now()
             print(fitness.delete_dataset(datetime(2000, 1, 1), datetime(now.year, now.month, now.day)))
+            print("Done")
         elif not args.start_date or not args.end_date:
             print("start_date or end_date not provided")
             sys.exit(1)
@@ -238,6 +241,10 @@ def main():
             start = [int(s) for s in args.start_date.split("-")]
             end = [int(s) for s in args.end_date.split("-")]
             print(fitness.delete_dataset(datetime(*start), datetime(*end)))
+            print("Done")
+    else:
+        print("Invalid command!")
+        parser.print_help()
 
 
 if __name__ == '__main__':
