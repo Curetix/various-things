@@ -38,9 +38,9 @@ def get_datasource_identifier(datasource, project_number):
 
 class Fitness:
     def __init__(self):
-        self.project_number = 415267609441
+        self.project_number = 924200877628
         self.datasource = {
-            "dataStreamName": "Curetix Fitness",
+            "dataStreamName": "curetix_fitness",
             "type": "derived",
             "application": {
                 "name": "Curetix Fitness (beta)",
@@ -56,8 +56,8 @@ class Fitness:
                 "name": "com.google.step_count.delta"
             },
             "device": {
-                "manufacturer": "Xiaomi",
-                "model": "Smart Band 7",
+                "manufacturer": "xiaomi",
+                "model": "smart_band_7",
                 "type": "watch",
                 "uid": "123456789",
                 "version": "1.0"
