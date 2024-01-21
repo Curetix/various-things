@@ -95,14 +95,17 @@ def redeem(code: str):
             game_title = current_redeem_form.find_element(By.NAME, "archway_code_redemption[title]").get_attribute("value")
             game_platform = current_redeem_form.find_element(By.NAME, "archway_code_redemption[service]").get_attribute("value")
             print("Redeeming code for %s on %s" % (game_titles.get(game_title, game_title), platforms.get(game_platform, game_platform)))
-        except Exception:
+        except:
             print("Redeeming code for unknown game or platform")
 
         current_redeem_form.submit()
 
         # Get result text from alert box
-        result = driver.find_element(By.CLASS_NAME, "alert").text
-        print(result)
+        try:
+            result = driver.find_element(By.CLASS_NAME, "alert").text
+            print(result)
+        except:
+            print("Result unknown")
 
         redeems += 1
         if redeems == len(code_redeem_forms):
