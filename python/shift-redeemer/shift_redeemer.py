@@ -53,7 +53,7 @@ def login(email: str, password: str):
         print("Logged in successfully!")
 
 
-def redeem(code: str):
+def redeem(code: str, skip: int = 0):
     game_titles = {
         "willow2": "Borderlands 2",
         "daffodil": "Tiny Tina's Wonderlands",
@@ -69,7 +69,7 @@ def redeem(code: str):
     }
 
     driver.get("%s/rewards" % base_url)
-    redeems = 0
+    redeems = skip
 
     while True:
         code_input = driver.find_element(By.NAME, "shift_code")
@@ -80,14 +80,16 @@ def redeem(code: str):
 
         code_result = driver.find_element(By.ID, "code_results")
         code_redeem_forms = driver.find_elements(By.ID, "new_archway_code_redemption")
+        result = code_result.text
 
-        if "Unexpected error occurred" in code_result.text:
+        if "Please wait" in result or "Unexpected error occurred" in result:
+            print(result)
             print("Error redeeming code, likely rate-limited. Waiting 60 seconds...")
             sleep(60)
             continue
 
-        if "This is not a valid SHiFT code" in code_result.text or len(code_redeem_forms) == 0:
-            print(code_result.text)
+        if "This is not a valid SHiFT code" in result or len(code_redeem_forms) == 0:
+            print(result)
             break
 
         current_redeem_form = code_redeem_forms[redeems]
@@ -99,6 +101,9 @@ def redeem(code: str):
             print("Redeeming code for unknown game or platform")
 
         current_redeem_form.submit()
+
+        # Wait for result text, it might not appear immediately
+        sleep(3)
 
         # Get result text from alert box
         try:
@@ -125,6 +130,7 @@ if __name__ == "__main__":
     parser.add_argument("-e", "--email", help="SHiFT email, can also use the SHIFT_EMAIL environment variable")
     parser.add_argument("-p", "--password", help="SHiFT password, can also use the SHIFT_PASSWORD environment variable")
     parser.add_argument("-b", "--browser", help="Select browser to use: chrome (default), edge, firefox", default="chrome")
+    parser.add_argument("-s", "--skip", help="Skip the specified number of redemptions", type=int, default=0)
     parser.add_argument("--not-headless", help="Do not run in headless mode", action="store_true", default=False)
     parser.add_argument("code", help="SHiFT code to redeem")
     args = parser.parse_args()
@@ -166,5 +172,5 @@ if __name__ == "__main__":
     driver.implicitly_wait(0.5)
 
     login(email, password)
-    redeem(code)
+    redeem(code, args.skip)
 
