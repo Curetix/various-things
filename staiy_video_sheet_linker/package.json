@@ -1,0 +1,14 @@
+{
+  "name": "staiy-video-sheet-linker",
+  "module": "linker.ts",
+  "type": "module",
+  "dependencies": {
+    "@google-cloud/local-auth": "^3.0.1",
+    "googleapis": "^137.1.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  }
+}

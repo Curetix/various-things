@@ -1,0 +1,8 @@
+node_modules/
+
+package-lock.json
+pnpm-lock.yml
+bun.lockb
+
+credentials.json
+token.json
